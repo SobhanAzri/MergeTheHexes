@@ -9,6 +9,7 @@
 *
 ********************************************************************************************/
 
+#include "assets.h"
 #include "raylib.h"
 #include "screens.h"
 
@@ -59,6 +60,8 @@ static int transToScreen = -1;
 // TODO: Define global variables here, recommended to make them static
 
 EGameScreen currentScreen = EGameScreen::LOGO;
+static Texture2D cursorTexture;
+static Vector2 cursorPosition = {0, 0};
 
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
@@ -93,7 +96,11 @@ int main(void)
     //target = LoadRenderTexture(screenWidth, screenHeight);
     //SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
+
+    cursorTexture = LoadTexture("resources/cursor.png");
     currentScreen = EGameScreen::GAMEPLAY;
+
+    HideCursor();
     InitGameplayScreen();
     //InitLogoScreen();
 
@@ -231,6 +238,8 @@ void UpdateDrawFrame(void)
     // TODO: Update variables / Implement example logic at this point
    
     frameCounter++;
+    cursorPosition = GetMousePosition();
+
     //----------------------------------------------------------------------------------
 
     // Draw
@@ -284,7 +293,9 @@ void UpdateDrawFrame(void)
             case GAMEPLAY: DrawGameplayScreen(); break;
             default: break;
         }
-
+        
+        DrawTexture(cursorTexture, cursorPosition.x - global_cursor_width_height/4,
+             cursorPosition.y - global_cursor_width_height/4, Fade(PINK, .45f));
 
     EndDrawing();
     //----------------------------------------------------------------------------------  

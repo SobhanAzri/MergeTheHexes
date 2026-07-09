@@ -102,12 +102,17 @@ void DrawGameplayScreen()
 
     Rectangle torchSourceRec = {float(currentTorchFrame * gameplay_torch_width) , 0,
          gameplay_torch_width, gameplay_torch_height};
-    Rectangle torchLightSourceRec = {float(currentTorchFrame * gameplay_torch_light_width_height) , 0,
+    Rectangle torchLightSourceRect = {float(currentTorchFrame * gameplay_torch_light_width_height) , 0,
          gameplay_torch_light_width_height, gameplay_torch_light_width_height};
     for (int i = 0; i < 3; i++)
     {
+        Rectangle torchLightDestRect = {torches[i].rectLight.x - 30, torches[i].rectLight.y - 30,
+        gameplay_torch_light_width_height * 1.5, gameplay_torch_light_width_height * 1.5};
+
         DrawTextureRec(torchTexture, torchSourceRec, (Vector2){torches[i].rectTorch.x, torches[i].rectTorch.y}, Fade(WHITE, .8f));
-        DrawTextureRec(torchLightTexture, torchLightSourceRec, (Vector2){torches[i].rectLight.x, torches[i].rectLight.y}, Fade(ORANGE, .45f));
+        //DrawTextureRec(torchLightTexture, torchLightSourceRect, (Vector2){torches[i].rectLight.x, torches[i].rectLight.y}, Fade(ORANGE, .45f));
+        DrawTexturePro(torchLightTexture, torchLightSourceRect, torchLightDestRect,
+             {0,0}, 0, Fade(ORANGE, .35f));
     }
 
 

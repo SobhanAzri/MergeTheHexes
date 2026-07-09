@@ -2,7 +2,6 @@
 #define GRID_H
 
 #include <raylib.h>
-#include <raymath.h>
 #include "elements.h"
 
 #define GRID_SIZE 6
@@ -11,8 +10,13 @@
 
 struct FTile
 {
-  EHexValues hexValue;
-  bool bIsHighlighted;
+   Vector2 position;
+   Rectangle rect;
+   EHexValues hexValue;
+   bool bIsHighlighted;
+
+   int row;
+   int col;
 };
 
 class TileGrid
@@ -30,12 +34,19 @@ class TileGrid
 
     EHexValues RandomHex() const;
 
+    void CheckSelections();
+    void RemoveTileFromGrid(const int& row, const int& col);
+
  private:
 
     float gridOffsetX;
     float gridOffsetY;
 
-    FTile grid[GRID_SIZE][GRID_SIZE];
+    FTile tiles[GRID_SIZE][GRID_SIZE];
+    FTile* m_pTile_Focused;
+    FTile* m_pTile_MatchingStart;
+    FTile* m_pTile_MatchingEnd;
+    Texture2D tileTexture;
 };
 
 #endif /* GRID_H */

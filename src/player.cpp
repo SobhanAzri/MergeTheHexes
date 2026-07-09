@@ -19,8 +19,8 @@ void Player::InitPlayer()
     playerTexture = LoadTexture("resources/player.png");
     playerLight = LoadTexture("resources/playerLight.png");
 
-    position.x = (float(GetScreenWidth()) / 2) - scaledWidth/2;
-    position.y = (float(GetScreenHeight()) /2) + (scaledHeight * 2) - (float)scaledHeight/2;
+    position.x = (float(GetScreenWidth()) / 2) - scaledWidth/2 + 5; //i added offset by 5 , now its not centered but i f* upped the map texture so this will look better;
+    position.y = (float(GetScreenHeight()) /2) + (scaledHeight * 2) - (float)scaledHeight/2 -20; // 20 is an offset;
 }
 
 void Player::UpdatePlayer()
@@ -37,7 +37,6 @@ void Player::UpdatePlayer()
     if (currentFrame >= maxFrames)
         currentFrame = 0;
 
-    printf("%d\n", currentFrame);
 }
 
 void Player::DrawPlayer()
