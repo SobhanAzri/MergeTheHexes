@@ -10,6 +10,7 @@
 ********************************************************************************************/
 
 #include "raylib.h"
+#include "screens.h"
 
 #if defined(PLATFORM_WEB)
     #include <emscripten/emscripten.h>      // Emscripten library
@@ -34,12 +35,6 @@
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
 //----------------------------------------------------------------------------------
-typedef enum { 
-    SCREEN_LOGO = 0, 
-    SCREEN_TITLE, 
-    SCREEN_GAMEPLAY, 
-    SCREEN_ENDING
-} GameScreen;
 
 // TODO: Define your custom data types here
 
@@ -48,15 +43,32 @@ typedef enum {
 //----------------------------------------------------------------------------------
 static const int screenWidth = 720;
 static const int screenHeight = 720;
+static const int screenDivider = 360;
 
-static RenderTexture2D target = { 0 };  // Render texture to render our game
+//static RenderTexture2D target = { 0 };  // Render texture to render our game
 static int frameCounter = 0;
 
+
+// some variables for game screens
+static float transAlpha = 0;
+static bool onTransition = false;
+static bool transFadeOut = false;
+static int transFromScreen = -1;
+static int transToScreen = -1;
+
 // TODO: Define global variables here, recommended to make them static
+
+EGameScreen currentScreen = EGameScreen::LOGO;
 
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
 //----------------------------------------------------------------------------------
+static void ChangeToScreen(const EGameScreen& screen);
+
+static void TransitionToScreen(int screen);
+static void UpdateTransition();
+static void DrawTransition();
+
 static void UpdateDrawFrame(void);      // Update and Draw one frame
 
 //------------------------------------------------------------------------------------
@@ -70,14 +82,20 @@ int main(void)
 
     // Initialization
     //--------------------------------------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "raylib gamejam template");
+    InitWindow(screenWidth, screenHeight, "Merge the Hexes");
     
+    InitAudioDevice();
+
     // TODO: Load resources / Initialize variables at this point
     
     // Render texture to draw, enables screen scaling
     // NOTE: If screen is scaled, mouse input should be scaled proportionally
-    target = LoadRenderTexture(screenWidth, screenHeight);
-    SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
+    //target = LoadRenderTexture(screenWidth, screenHeight);
+    //SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
+
+    currentScreen = EGameScreen::GAMEPLAY;
+    InitGameplayScreen();
+    //InitLogoScreen();
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
@@ -94,10 +112,18 @@ int main(void)
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
-    UnloadRenderTexture(target);
+
+    switch (currentScreen)
+    {
+        case LOGO: UnloadLogoScreen(); break;
+        case TITLE: UnloadTitleScreen(); break;
+        case GAMEPLAY: UnloadGameplayScreen(); break;
+        default: break;
+    }
     
     // TODO: Unload all loaded resources at this point
 
+    CloseAudioDevice();
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -107,6 +133,96 @@ int main(void)
 //--------------------------------------------------------------------------------------------
 // Module Functions Definition
 //--------------------------------------------------------------------------------------------
+
+static void ChangeToScreen(const EGameScreen& screen)
+{
+    switch (currentScreen)
+    {
+        case LOGO: UnloadLogoScreen(); break;
+        case TITLE: UnloadTitleScreen(); break;
+        case GAMEPLAY: UnloadGameplayScreen(); break;
+        default: break;
+    }
+
+    switch (screen)
+    {
+        case LOGO: InitLogoScreen(); break;
+        case TITLE: InitTitleScreen(); break;
+        case GAMEPLAY: InitGameplayScreen(); break;
+        default: break;
+    }
+
+    currentScreen = screen;
+}
+
+static void TransitionToScreen(int screen)
+{
+    onTransition = true;
+    transFromScreen = currentScreen;
+    transToScreen = screen;
+}
+
+static void UpdateTransition()
+{
+    if (!transFadeOut)
+    {
+        transAlpha += 0.05f;
+
+        if (transAlpha >= 1.0)
+        {
+            transAlpha = 1.0;
+
+            switch (transFromScreen)
+            {
+                case LOGO: UnloadLogoScreen(); break;
+                case TITLE: UnloadTitleScreen(); break;
+                case GAMEPLAY: UnloadGameplayScreen(); break;
+                default: break;
+            }
+
+            switch (transToScreen)
+            {
+                case LOGO:
+                {
+                    InitLogoScreen();
+                    currentScreen = LOGO;
+                } break;
+                case TITLE:
+                {
+                    InitTitleScreen();
+                    currentScreen = TITLE;
+                } break;
+                case GAMEPLAY:
+                {
+                    InitGameplayScreen();
+                    currentScreen = GAMEPLAY;
+                } break;
+                default: break;
+            }
+
+            transFadeOut = true;
+        }
+    }
+    else 
+    {
+        transAlpha -= 0.05f;
+
+        if (transAlpha <= 0)
+        {
+            transAlpha = 0;
+            transFadeOut = false;
+            onTransition = false;
+            transFromScreen = -1;
+            transToScreen = -1;
+        }
+    }
+}
+
+static void DrawTransition()
+{
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, transAlpha));
+}
+
 // Update and draw frame
 void UpdateDrawFrame(void)
 {
@@ -119,35 +235,56 @@ void UpdateDrawFrame(void)
 
     // Draw
     //----------------------------------------------------------------------------------
-    // Render game screen to a texture, 
-    // it could be useful for scaling or further shader postprocessing
-    BeginTextureMode(target);
-        ClearBackground(RAYWHITE);
-        
-        // TODO: Draw your game screen here
+    // Render game screen to a texture,
 
-        DrawRectangle(70, 90, 200, 200, BLACK);
-        DrawRectangle(70 + 16, 90 + 16, 200 - 32, 200 - 32, RAYWHITE);
-        DrawText("raylib", 70 + 200 - MeasureText("raylib", 40) - 32, 90 + 200 - 40 - 24, 40, BLACK);
+    if (!onTransition)
+    {
+        switch(currentScreen)
+        {
+            case LOGO:
+            {
+                UpdateLogoScreen();
 
-        DrawText("6.x", 290, 90 - 26, 280, BLACK);
-        DrawText("GAMEJAM", 70, 90 + 210, 120, MAROON);
+                if (FinishLogoScreen()) TransitionToScreen(GAMEPLAY);
 
-        if ((frameCounter/20)%2) DrawText("are you ready?", 160, 500, 50, BLACK);
-        
-        DrawRectangleLinesEx((Rectangle){ 0, 0, screenWidth, screenHeight }, 16, BLACK);
-        
-    EndTextureMode();
+            } break;
+            case TITLE:
+            {
+                UpdateTitleScreen();
+
+                if (FinishTitleScreen() == 1)
+                {
+                    //StopMusicStream(music);
+                    //TransitionToScreen(GAMEPLAY);
+                }
+
+            } break;
+            case GAMEPLAY:
+            {
+                UpdateGameplayScreen();
+
+                if (FinishGameplayScreen() == 1) ChangeToScreen(LOGO);
+                //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
+
+            } break;
+            default: break;
+        }
+    }
+    else
+        UpdateTransition();
     
-    // Render to screen (main framebuffer)
+    // Render to screen
     BeginDrawing();
         ClearBackground(RAYWHITE);
-        
-        // Draw render texture to screen, scaled if required
-        DrawTexturePro(target.texture, (Rectangle){ 0, 0, (float)target.texture.width, -(float)target.texture.height }, 
-            (Rectangle){ 0, 0, (float)target.texture.width, (float)target.texture.height }, (Vector2){ 0, 0 }, 0.0f, WHITE);
 
-        // TODO: Draw everything that requires to be drawn at this point, maybe UI?
+        switch(currentScreen)
+        {
+            case LOGO: DrawLogoScreen(); break;
+            case TITLE: DrawTitleScreen(); break;
+            case GAMEPLAY: DrawGameplayScreen(); break;
+            default: break;
+        }
+
 
     EndDrawing();
     //----------------------------------------------------------------------------------  
