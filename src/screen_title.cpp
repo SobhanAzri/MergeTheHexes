@@ -128,17 +128,17 @@ void DrawTitleScreen()
 
     Vector2 hexCenter = {(float)GetScreenWidth() /2 -150, (float)GetScreenHeight()/2 + 60};
 
-    DrawPolyLinesEx(hexCenter,
-     6, 125, 0, 5 , {125,0,0,255});
+   // DrawPolyLinesEx(hexCenter,
+    // 6, 125, 0, 5 , {125,0,0,255});
     DrawPolyLinesEx(hexCenter,
      3 , 100, -90, 5, {125,0,0,255});
 
     DrawPolyLinesEx(hexCenter,
      6 , 25, 0, 4, {125,0,0,255});
     DrawPolyLinesEx(hexCenter,
-     6 , 19, 0, 4, {125,0,0,255});
+     6 , 19, 0, 4, {1,93,1,255});
     DrawPolyLinesEx(hexCenter,
-     6 , 13, 0, 4, {125,0,0,255});
+     6 , 13, 0, 4, {105,190,210,255});
     DrawCircle(hexCenter.x,hexCenter.y, 5, {125,0,0,255});
      //DrawTriangleLines(fireTris[0], fireTris[1], fireTris[2], RED);
     //DrawTriangleLines(poisonTris[0], poisonTris[1], poisonTris[2], GREEN);

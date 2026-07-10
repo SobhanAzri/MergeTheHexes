@@ -101,7 +101,8 @@ int main(void)
     currentScreen = EGameScreen::LOGO;
 
     HideCursor();
-    InitGameplayScreen();
+    //InitGameplayScreen();
+    InitLogoScreen();
     //InitLogoScreen();
     //InitTitleScreen();
 
