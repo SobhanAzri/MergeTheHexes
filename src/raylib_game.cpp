@@ -98,11 +98,12 @@ int main(void)
 
 
     cursorTexture = LoadTexture("resources/cursor.png");
-    currentScreen = EGameScreen::GAMEPLAY;
+    currentScreen = EGameScreen::LOGO;
 
     HideCursor();
     InitGameplayScreen();
     //InitLogoScreen();
+    //InitTitleScreen();
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
@@ -254,7 +255,7 @@ void UpdateDrawFrame(void)
             {
                 UpdateLogoScreen();
 
-                if (FinishLogoScreen()) TransitionToScreen(GAMEPLAY);
+                if (FinishLogoScreen()) TransitionToScreen(TITLE);
 
             } break;
             case TITLE:
@@ -295,7 +296,7 @@ void UpdateDrawFrame(void)
         }
         
         DrawTexture(cursorTexture, cursorPosition.x - global_cursor_width_height/4,
-             cursorPosition.y - global_cursor_width_height/4, Fade(PINK, .45f));
+             cursorPosition.y - global_cursor_width_height/4, Fade({255, 200, 200}, .75f));
 
     EndDrawing();
     //----------------------------------------------------------------------------------  

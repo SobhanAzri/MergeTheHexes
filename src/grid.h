@@ -36,6 +36,7 @@ class TileGrid
 
     void CheckSelections();
     void RemoveTileFromGrid(const int& row, const int& col);
+    void HighlightMatchingTileset();
 
  private:
 
@@ -47,6 +48,8 @@ class TileGrid
     FTile* m_pTile_MatchingStart;
     FTile* m_pTile_MatchingEnd;
     Texture2D tileTexture;
+
+    bool m_bIsHighlightingTileset;
 };
 
 #endif /* GRID_H */

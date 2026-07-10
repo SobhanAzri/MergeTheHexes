@@ -29,6 +29,8 @@ void TileGrid::InitGrid()
     m_pTile_Focused = nullptr;
     m_pTile_MatchingStart = nullptr;
     m_pTile_MatchingEnd = nullptr;
+
+    m_bIsHighlightingTileset = false;
 }
     
 void TileGrid::UpdateGrid()
@@ -49,6 +51,7 @@ void TileGrid::UpdateGrid()
                 {
                     tiles[i][j].bIsHighlighted = true; 
                     m_pTile_Focused = &tiles[i][j];
+
                 }
                 else
                 {
@@ -107,11 +110,14 @@ void TileGrid::DrawGrid()
 
            
             if (tiles[i][j].bIsHighlighted)
-                DrawTexturePro(tileTexture, sourceRect, tiles[i][j].rect, {0,0}, 0, GREEN);
+                DrawTexturePro(tileTexture, sourceRect, tiles[i][j].rect,
+             {0,0}, 0, {120,255,120, 255});
             else
                 DrawTexturePro(tileTexture, sourceRect, tiles[i][j].rect, {0,0}, 0, WHITE);
         }
     }
+
+    HighlightMatchingTileset();
 }
 
 void TileGrid::UnloadGrid()
@@ -163,7 +169,42 @@ void TileGrid::CheckSelections()
     return;
 }
 
-void RemoveTileFromGrid(const int& row, const int& col)
+void TileGrid::RemoveTileFromGrid(const int& row, const int& col)
 {
 
+}
+
+void TileGrid::HighlightMatchingTileset()
+{
+    if (m_pTile_MatchingStart == nullptr || m_pTile_Focused == nullptr)
+        return;
+
+    m_bIsHighlightingTileset = true;
+
+    if (m_pTile_MatchingStart->col == m_pTile_Focused->col)
+    {
+        int sharedCol = m_pTile_MatchingStart->col;
+        int minRow = std::min(m_pTile_MatchingStart->row, m_pTile_Focused->row);
+        int maxRow = std::max(m_pTile_MatchingStart->row, m_pTile_Focused->row);
+
+        for (int i = minRow; i <= maxRow; i++)
+        {
+            tiles[i][sharedCol].bIsHighlighted = true;
+        }
+
+        return;
+    }
+    else if (m_pTile_MatchingStart->row == m_pTile_Focused->row)
+    {
+        int sharedRow = m_pTile_MatchingStart->row;
+        int minCol = std::min(m_pTile_MatchingStart->col, m_pTile_Focused->col);
+        int maxCol = std::max(m_pTile_MatchingStart->col, m_pTile_Focused->col);
+
+        for (int i = minCol; i <= maxCol; i++)
+        {
+            tiles[sharedRow][i].bIsHighlighted = true;
+        }
+
+        return;
+    }
 }
