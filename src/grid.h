@@ -32,10 +32,9 @@ class TileGrid
     void DrawGrid();
     void UnloadGrid();
 
-    EHexValues RandomHex() const;
-
     void CheckSelections();
-    void RemoveTileFromGrid(const int& row, const int& col);
+    void RemoveMatchingTilesFromRow(const int& row,  const int& colMin, const int& colMax);
+    void RemoveMatchingTilesFromCol(const int& col, const int& rowMin, const int& rowMax);
     void HighlightMatchingTileset();
 
  private:
@@ -48,8 +47,6 @@ class TileGrid
     FTile* m_pTile_MatchingStart;
     FTile* m_pTile_MatchingEnd;
     Texture2D tileTexture;
-
-    bool m_bIsHighlightingTileset;
 };
 
 #endif /* GRID_H */

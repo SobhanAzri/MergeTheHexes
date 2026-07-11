@@ -1,13 +1,14 @@
 #include "assets.h"
 #include "screens.h"
 #include <raylib.h>
+#include <cstdio>
 #include "raymath.h"
 
 
 static int frameCounter = 0;
 
 
-static bool bShowTutorial = false;
+static bool bIsShowingTutorial = false;
 static bool bIsScreenFinished = false;
 
 static Texture2D titleTexture;
@@ -34,6 +35,8 @@ static int snowflakeCurrentFrame = 0;
 static float snowflakeFrameSpeed = 0;
 static int snowflakeMaxframes = 0;
 
+Music title_music = { 0 };
+
 
 /*Vector2 fireTris[3];
 Vector2 poisonTris[3];
@@ -41,7 +44,8 @@ Vector2 freezeTris[3];*/
 
 void InitTitleScreen()
 {
-    bShowTutorial = false;
+    bIsShowingTutorial = false;
+    bIsScreenFinished = false;
 
 
     titleTexture = LoadTexture("resources/title/title.png");
@@ -50,6 +54,15 @@ void InitTitleScreen()
     snowflakeTexture = LoadTexture("resources/title/snowflakes.png");
     poisonTexture = LoadTexture("resources/title/poison.png");
     poisonSmokeTexture = LoadTexture("resources/title/poisonSmoke.png");
+
+
+    title_music = LoadMusicStream("resources/title/title_music.wav");
+    SetMusicVolume(title_music, .5f);
+    PlayMusicStream(title_music);
+
+
+    SetMusicVolume(fireSound, .9f);
+    PlayMusicStream(fireSound);
 
     frameTimer = 0;
 
@@ -67,6 +80,7 @@ void InitTitleScreen()
     snowflakeCurrentFrame = 0;
     snowflakeFrameTimer = 0;
     snowflakeMaxframes = 8;
+
 
 
     // These look horrible because i couldnt be patient wit them
@@ -94,31 +108,38 @@ void UpdateTitleScreen()
     poisonSmokeFrameTimer += frameTimer;
     snowflakeFrameTimer += frameTimer;
 
-    if (fireFrameTimer >= fireFrameSpeed)
+    UpdateMusicStream(title_music);
+    UpdateMusicStream(fireSound);
+
+    if (!bIsShowingTutorial)
     {
-        fireCurrentFrame++;
-        fireFrameTimer = 0;
-    }
-    if (fireCurrentFrame >= fireMaxFrames)
-        fireCurrentFrame = 0;
+        if (fireFrameTimer >= fireFrameSpeed)
+        {
+            fireCurrentFrame++;
+            fireFrameTimer = 0;
+        }
+        if (fireCurrentFrame >= fireMaxFrames)
+            fireCurrentFrame = 0;
 
 
-    if (poisonSmokeFrameTimer >= poisonSmokeFrameSpeed)
-    {
-        poisonSmokeCurrentFrame++;
-        poisonSmokeFrameTimer = 0;
-    }
-    if (poisonSmokeCurrentFrame >= poisonSmokeMaxFrames)
-        poisonSmokeCurrentFrame = 0;
+        if (poisonSmokeFrameTimer >= poisonSmokeFrameSpeed)
+        {
+            poisonSmokeCurrentFrame++;
+            poisonSmokeFrameTimer = 0;
+        }
+        if (poisonSmokeCurrentFrame >= poisonSmokeMaxFrames)
+            poisonSmokeCurrentFrame = 0;
 
     
-    if (snowflakeFrameTimer >= snowflakeFrameSpeed)
-    {
-        snowflakeCurrentFrame++;
-        snowflakeFrameTimer = 0;
+        if (snowflakeFrameTimer >= snowflakeFrameSpeed)
+        {   
+            snowflakeCurrentFrame++;
+            snowflakeFrameTimer = 0;
+        }
+        if (snowflakeCurrentFrame >= snowflakeMaxframes)
+            snowflakeCurrentFrame = 0;
     }
-    if (snowflakeCurrentFrame >= snowflakeMaxframes)
-        snowflakeCurrentFrame = 0;
+    
 }
 
 void DrawTitleScreen()
@@ -169,8 +190,14 @@ void DrawTitleScreen()
             hexCenter.y + int(title_snowflake_height/2) - 30},
              {60,180,255,255});
 
+    Rectangle playButton = {float(GetScreenWidth() - 275), float(GetScreenHeight()/2 + 175), 200, 50};
+    if (Button(playButton, "PLAY", 20, {125,0,0}))
+            {
+                bIsScreenFinished = true;
+            }
 
-    DrawText("Developed by Sobhan Azari Asl", 15, GetScreenHeight() - 20, 14, GRAY);
+
+    DrawTextEx(font, "Developed by Sobhan Azari Asl", {15, float(GetScreenHeight() - 25)}, 18, 1, GRAY);
 }
 
 void UnloadTitleScreen()
@@ -181,6 +208,8 @@ void UnloadTitleScreen()
     UnloadTexture(snowflakeTexture);
     UnloadTexture(poisonTexture);
     UnloadTexture(poisonSmokeTexture);
+
+    UnloadMusicStream(title_music);
 }
 
 int FinishTitleScreen()

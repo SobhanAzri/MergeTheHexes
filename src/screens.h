@@ -43,12 +43,18 @@ enum EGameScreen
 // Global Variables Declaration (shared by several modules)
 //----------------------------------------------------------------------------------
 extern EGameScreen currentScreen;
-//extern Font font;
-//extern Font font2;
-////extern Music music;
+extern Font font;
+extern Font font2;
+extern Music fireSound;
+extern Sound clickSounds[2];
+extern Sound errorSounds[2];
+extern Sound successSounds[2];
 ///extern Sound fxCoin;
 //extern int time;
 //extern int result;      // 0-Loose, 1-Win
+
+
+bool Button(const Rectangle& bounds, const char* text, const float& fontSize, const Color& color);
 
 //----------------------------------------------------------------------------------
 // Logo Screen Functions Declaration

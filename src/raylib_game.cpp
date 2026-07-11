@@ -60,8 +60,15 @@ static int transToScreen = -1;
 // TODO: Define global variables here, recommended to make them static
 
 EGameScreen currentScreen = EGameScreen::LOGO;
+Font font = {0 };
+Font font2 = { 0 };
 static Texture2D cursorTexture;
-static Vector2 cursorPosition = {0, 0};
+static Vector2 cursorPosition = {0, 0 };
+
+Sound clickSounds[] = { 0 };
+Sound errorSounds[] = { 0 };
+Sound successSounds[] = { 0 };
+Music fireSound = { 0 };
 
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
@@ -97,12 +104,26 @@ int main(void)
     //SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
 
+    clickSounds[0] = LoadSound("resources/interfaceAudio/click01.ogg");
+    clickSounds[1] = LoadSound("resources/interfaceAudio/click02.ogg");
+    errorSounds[0] = LoadSound("resources/interfaceAudio/error01.ogg");
+    errorSounds[1] = LoadSound("resources/interfaceAudio/error02.ogg");
+    successSounds[0] = LoadSound("resources/interfaceAudio/success01.ogg");
+    successSounds[1] = LoadSound("resources/interfaceAudio/success02.ogg");
+
+
+
+    fireSound = LoadMusicStream("resources/title/title_fire.wav");
+
     cursorTexture = LoadTexture("resources/cursor.png");
-    currentScreen = EGameScreen::LOGO;
+    currentScreen = EGameScreen::GAMEPLAY;
+
+    font = LoadFont("resources/MountainKing.ttf");
+    font2 = LoadFont("resources/font2.png");
+    SetTextureFilter(font2.texture, TEXTURE_FILTER_BILINEAR);
 
     HideCursor();
-    //InitGameplayScreen();
-    InitLogoScreen();
+    InitGameplayScreen();
     //InitLogoScreen();
     //InitTitleScreen();
 
@@ -129,8 +150,19 @@ int main(void)
         case GAMEPLAY: UnloadGameplayScreen(); break;
         default: break;
     }
+
+    
     
     // TODO: Unload all loaded resources at this point
+
+    UnloadFont(font);
+    UnloadMusicStream(fireSound);
+    for (int i = 0; i < 2; i++)
+    {
+        UnloadSound(clickSounds[i]);
+        UnloadSound(errorSounds[i]);
+        UnloadSound(successSounds[i]);
+    }
 
     CloseAudioDevice();
     CloseWindow();        // Close window and OpenGL context
@@ -266,7 +298,7 @@ void UpdateDrawFrame(void)
                 if (FinishTitleScreen() == 1)
                 {
                     //StopMusicStream(music);
-                    //TransitionToScreen(GAMEPLAY);
+                    TransitionToScreen(GAMEPLAY);
                 }
 
             } break;
@@ -274,8 +306,7 @@ void UpdateDrawFrame(void)
             {
                 UpdateGameplayScreen();
 
-                if (FinishGameplayScreen() == 1) ChangeToScreen(LOGO);
-                //else if (FinishGameplayScreen() == 2) TransitionToScreen(TITLE);
+                if (FinishGameplayScreen() == 1) ChangeToScreen(TITLE);
 
             } break;
             default: break;
@@ -301,4 +332,49 @@ void UpdateDrawFrame(void)
 
     EndDrawing();
     //----------------------------------------------------------------------------------  
+}
+
+
+bool Button(const Rectangle& bounds, const char* text, const float& fontSize, const Color& color)
+{
+    bool bIsPressed = false;
+    bool bIsFocused = false;
+
+    Vector2 textSize = MeasureTextEx(font, text, fontSize, 1);
+
+    Vector2 mousePosition = GetMousePosition(); 
+
+    if ( CheckCollisionPointRec(mousePosition, bounds))
+    {
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+        {
+            bIsPressed = true;
+            PlaySound(clickSounds[rand() % 2]);
+        }
+        else
+            bIsFocused = true;
+    }
+    else
+    {
+        bIsFocused = false;
+    }
+
+    float buttonOpacity = 255;
+    if (bIsFocused)
+    {
+            buttonOpacity = .75f;
+    }
+    else
+    {
+            buttonOpacity = 1;
+    }
+
+    DrawRectangleRoundedLinesEx(bounds, .5, 5,2, BLACK);
+    DrawRectangleRounded(bounds, .5, 5, Fade(color, buttonOpacity));
+    DrawTextEx(font, text, 
+        {bounds.x + bounds.width/2 - textSize.x/2 - 4, bounds.y + bounds.height/2 - textSize.y/2 - 3},
+             30, 1,Fade(BLACK, buttonOpacity));
+
+
+    return bIsPressed;
 }

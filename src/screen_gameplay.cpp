@@ -36,6 +36,8 @@ static int torchMaxFrames = 8;
 static float torchFrameSpeed = .1f;
 static int currentTorchFrame = 0;
 
+static Music music = { 0 };
+
 static Player player;
 static  TileGrid tileGrid;
 
@@ -61,6 +63,10 @@ void InitGameplayScreen()
         torches[i].rectLight.width = gameplay_torch_light_width_height;
         torches[i].rectLight.height = gameplay_torch_light_width_height; 
     }
+    music = LoadMusicStream("resources/gameplay_music.wav");
+    SetMusicVolume(music, .9f);
+    PlayMusicStream(music);
+    SetMusicVolume(fireSound, .55f);
 
     target = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
     SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
@@ -76,6 +82,8 @@ void UpdateGameplayScreen()
     frameCounter++;
     frameTimer += GetFrameTime();
 
+    UpdateMusicStream(music);
+
     if (frameTimer >= torchFrameSpeed)
     {
         currentTorchFrame++;
@@ -86,6 +94,8 @@ void UpdateGameplayScreen()
     {
         currentTorchFrame = 0;
     }
+
+    UpdateMusicStream(fireSound);
     
     player.UpdatePlayer();
     tileGrid.UpdateGrid();
@@ -126,6 +136,7 @@ void DrawGameplayScreen()
 void UnloadGameplayScreen()
 {
     UnloadTexture(levelBackground);
+    UnloadMusicStream(music);
 
     player.UnloadPlayer();
     tileGrid.UnloadGrid();

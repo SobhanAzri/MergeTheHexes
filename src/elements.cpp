@@ -1,4 +1,5 @@
 #include "elements.h"
+#include <raylib.h>
 
 char GetHexSymbol(const EHexValues& HexValue)
 {
@@ -21,4 +22,41 @@ char GetHexSymbol(const EHexValues& HexValue)
     }
 
     return '0';
+}
+
+EHexValues RandomHex()
+{
+    EHexValues AllPossibleValues[5] = 
+    {
+        EHexValues::Hex1,
+        EHexValues::Hex2,
+        EHexValues::Hex4,
+        EHexValues::Hex8,
+        EHexValues::HexF
+    };
+
+    int randomIndex = GetRandomValue(0, 4);
+
+    return AllPossibleValues[randomIndex];
+}
+
+Color GetHexValueColor(const EHexValues& hexValue)
+{
+    switch (hexValue)
+    {
+        case EHexValues::Hex1:
+            return WHITE;
+        case EHexValues::Hex2:
+            return {210, 210, 240,255};
+        case EHexValues::Hex4:
+            return {180, 215, 240,255};
+        case EHexValues::Hex8:
+            return {145, 189, 223,255};
+        case EHexValues::HexF:
+            return {255, 235, 0, 255};
+        default:
+            break;
+    }
+
+    return WHITE;
 }

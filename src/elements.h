@@ -1,6 +1,8 @@
 #ifndef ELEMENTS_H
 #define ELEMENTS_H
 
+struct Color;
+
 enum class EElementTypes
 {
     FireHex = 0,
@@ -19,5 +21,7 @@ enum class EHexValues
 };
 
 char GetHexSymbol(const EHexValues& HexValue);
+EHexValues RandomHex();
+Color GetHexValueColor(const EHexValues& hexValue);
 
 #endif /* ELEMENTS_H */
