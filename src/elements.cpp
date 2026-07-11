@@ -26,19 +26,43 @@ char GetHexSymbol(const EHexValues& HexValue)
 
 EHexValues RandomHex()
 {
-    EHexValues AllPossibleValues[5] = 
+    /*static EHexValues AllPossibleValues[4] = 
     {
-        EHexValues::Hex1,
+        //EHexValues::Hex1,
         EHexValues::Hex2,
         EHexValues::Hex4,
         EHexValues::Hex8,
         EHexValues::HexF
     };
+    int randomIndex = GetRandomValue(0, 3);
+    return AllPossibleValues[randomIndex];*/
 
-    int randomIndex = GetRandomValue(0, 4);
+    // i tried so many ways to not hit dead end but i noticed for a 6x6 grid its nearly impossible
+    // to have 5 different tile hexadecimal values so i decreased the number of elements to 4
+    // also i thought about checking for deadends and reshuffling if there is no possible moves
+    // but imlementing that would take a full day for me so i will just add a button for reshuffling
 
-    return AllPossibleValues[randomIndex];
+    int dice = GetRandomValue(1, 100);
+
+    if (dice <= 40)
+        return EHexValues::Hex2;
+    else if (dice <= 70)
+        return EHexValues::Hex4;
+    else if (dice <= 90)
+        return EHexValues::Hex8;
+    else if (dice <= 100)
+        return EHexValues::HexF;
 }
+
+
+
+//
+//  After playing the game myself , i noticed that it hurts my eyes to stare at a bunch of tiles with same color
+//  and just cheking the characters written on it.
+//  so i made F golden and the other hexadecimal values are just slightly different in color so player can find matching
+//  tiles easily, i could use these colors for font colors instead of the tile itself but i think i need to test it first
+//
+//  ---nvm i tested out font colors and it was horrible!
 
 Color GetHexValueColor(const EHexValues& hexValue)
 {

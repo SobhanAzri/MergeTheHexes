@@ -17,7 +17,8 @@ struct Torch
     Rectangle rectLight;
 };
 
-//s
+
+static float secondsToEndScreen = 180;
 
 static int frameCounter = 0;
 static float frameTimer = 0;
@@ -43,6 +44,8 @@ static  TileGrid tileGrid;
 
 void InitGameplayScreen()
 {
+    secondsToEndScreen = 180;
+
     frameCounter = 0;
     thisFrame = 0;
     currentTorchFrame = 0;
@@ -82,6 +85,8 @@ void UpdateGameplayScreen()
     frameCounter++;
     frameTimer += GetFrameTime();
 
+    secondsToEndScreen -= GetFrameTime();
+
     UpdateMusicStream(music);
 
     if (frameTimer >= torchFrameSpeed)
@@ -99,6 +104,9 @@ void UpdateGameplayScreen()
     
     player.UpdatePlayer();
     tileGrid.UpdateGrid();
+
+    if (secondsToEndScreen <= 0)
+        bIsScreenFinished = true;
 }
 
 void DrawGameplayScreen()
@@ -106,6 +114,13 @@ void DrawGameplayScreen()
     // Draw Background
     DrawTexture(levelBackground,
          0, 0, WHITE);
+
+    // Draw remaining seconds
+    int minutes = int(secondsToEndScreen) / 60;
+    int seconds = int(secondsToEndScreen) % 60;
+
+    DrawTextEx(font, TextFormat("%d:%d",minutes,seconds), 
+    {float(GetScreenWidth()/2), float(GetScreenHeight()/2)}, 30, 1, BLACK);
     
 
     // Draw Torches

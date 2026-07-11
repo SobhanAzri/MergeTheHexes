@@ -13,6 +13,7 @@ struct FTile
    Vector2 position;
    Rectangle rect;
    EHexValues hexValue;
+   
    bool bIsHighlighted;
 
    int row;
@@ -31,7 +32,8 @@ class TileGrid
     void UpdateGrid();
     void DrawGrid();
     void UnloadGrid();
-
+    void ResetGrid();
+    
     void CheckSelections();
     void RemoveMatchingTilesFromRow(const int& row,  const int& colMin, const int& colMax);
     void RemoveMatchingTilesFromCol(const int& col, const int& rowMin, const int& rowMax);

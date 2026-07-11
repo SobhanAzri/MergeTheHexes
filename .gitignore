@@ -79,5 +79,6 @@ android.*
 !src/minshell.html
 !src/shell.html
 
+# my generated build folders
 build/
 build-linux/

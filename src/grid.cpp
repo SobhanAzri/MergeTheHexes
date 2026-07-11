@@ -124,7 +124,7 @@ void TileGrid::DrawGrid()
            
             if (tiles[i][j].bIsHighlighted)
                 DrawTexturePro(tileTexture, sourceRect, tiles[i][j].rect,
-             {0,0}, 0, {66,245,66, 255});
+             {0,0}, 0, {40,245,35, 255});
             else
                 DrawTexturePro(tileTexture, sourceRect, tiles[i][j].rect,
              {0,0}, 0, GetHexValueColor(tiles[i][j].hexValue));
@@ -141,8 +141,6 @@ void TileGrid::UnloadGrid()
 {
     UnloadTexture(tileTexture);
 }
-
-
 
 void TileGrid::CheckSelections()
 {
@@ -233,7 +231,16 @@ void TileGrid::RemoveMatchingTilesFromCol(const int& col, const int& rowMin, con
 
     int iterator = 0;
 
-    for (int i = rowMin ; i <= 0; i--)
+    /*if (rowMin != 0)
+    {
+        for (int i = rowMin; i <)
+    }*/
+
+
+    // the best thing i can think of is this after testing out couple of methods
+    // if i find extra time before ending jam , ill rethink about this method , but for now it works
+
+    for (int i = rowMin ; i >= 0; i--)
     {
         if (i != 0)
             tiles[rowMax - iterator][col].hexValue = tiles[i - 1][col].hexValue;
@@ -243,7 +250,7 @@ void TileGrid::RemoveMatchingTilesFromCol(const int& col, const int& rowMin, con
         iterator++;
     }
 
-    for (int i = rowMax - iterator; i <= 0; i--)
+    for (int i = rowMax - iterator; i >= 0; i--)
     {
         tiles[i][col].hexValue = RandomHex();
     }
