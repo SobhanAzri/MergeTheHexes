@@ -44,11 +44,11 @@ EHexValues RandomHex()
 
     int dice = GetRandomValue(1, 100);
 
-    if (dice <= 40)
+    if (dice <= 30)
         return EHexValues::Hex2;
-    else if (dice <= 70)
+    else if (dice <= 60)
         return EHexValues::Hex4;
-    else if (dice <= 90)
+    else if (dice <= 80)
         return EHexValues::Hex8;
     else if (dice <= 100)
         return EHexValues::HexF;

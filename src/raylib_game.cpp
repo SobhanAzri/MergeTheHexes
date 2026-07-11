@@ -10,6 +10,7 @@
 ********************************************************************************************/
 
 #include "assets.h"
+#include "magic.h"
 #include "raylib.h"
 #include "screens.h"
 
@@ -63,7 +64,9 @@ EGameScreen currentScreen = EGameScreen::LOGO;
 Font font = {0 };
 Font font2 = { 0 };
 static Texture2D cursorTexture;
+static Texture2D cursorLightTexture;
 static Vector2 cursorPosition = {0, 0 };
+
 
 Sound clickSounds[] = { 0 };
 Sound errorSounds[] = { 0 };
@@ -116,15 +119,16 @@ int main(void)
     fireSound = LoadMusicStream("resources/title/title_fire.wav");
 
     cursorTexture = LoadTexture("resources/cursor.png");
-    currentScreen = EGameScreen::GAMEPLAY;
+    cursorLightTexture = LoadTexture("resources/cursor_light.png");
+    currentScreen = EGameScreen::LOGO;
 
     font = LoadFont("resources/MountainKing.ttf");
     font2 = LoadFont("resources/font2.png");
     SetTextureFilter(font2.texture, TEXTURE_FILTER_BILINEAR);
 
     HideCursor();
-    InitGameplayScreen();
-    //InitLogoScreen();
+    //InitGameplayScreen();
+    InitLogoScreen();
     //InitTitleScreen();
 
 #if defined(PLATFORM_WEB)
@@ -163,6 +167,8 @@ int main(void)
         UnloadSound(errorSounds[i]);
         UnloadSound(successSounds[i]);
     }
+    UnloadTexture(cursorTexture);
+    UnloadTexture(cursorLightTexture);
 
     CloseAudioDevice();
     CloseWindow();        // Close window and OpenGL context
@@ -319,6 +325,7 @@ void UpdateDrawFrame(void)
     BeginDrawing();
         ClearBackground(RAYWHITE);
 
+
         switch(currentScreen)
         {
             case LOGO: DrawLogoScreen(); break;
@@ -327,8 +334,12 @@ void UpdateDrawFrame(void)
             default: break;
         }
         
+
         DrawTexture(cursorTexture, cursorPosition.x - global_cursor_width_height/4,
-             cursorPosition.y - global_cursor_width_height/4, Fade({255, 200, 200}, .75f));
+             cursorPosition.y - global_cursor_width_height/4, MagicBar::Get().GetMagicColor());
+        DrawTexture(cursorLightTexture, cursorPosition.x - global_cursor_light_width_height/2,
+             cursorPosition.y - global_cursor_light_width_height/2, Fade(MagicBar::Get().GetMagicColor(), .3f));
+        
 
     EndDrawing();
     //----------------------------------------------------------------------------------  

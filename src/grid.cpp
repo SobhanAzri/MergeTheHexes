@@ -6,26 +6,17 @@
 #include <raylib.h>
 #include "assets.h"
 #include "screens.h"
+#include "magic.h"
 
 void TileGrid::InitGrid()
 {
+    gridResetTimer = 0;
     gridOffsetX = GetScreenWidth()/2 - (GRID_SIZE/2 * (TILE_SIZE));
     gridOffsetY = 25 ;
 
     tileTexture = LoadTexture("resources/tileButton.png");
 
-    for (int i = 0; i < GRID_SIZE; i++)
-    {
-        for (int j = 0; j < GRID_SIZE; j++)
-        {
-            tiles[i][j].position = {gridOffsetX + (j * TILE_SIZE - 5), gridOffsetY + (i * TILE_SIZE - 5)};
-            tiles[i][j].rect = {gridOffsetX + (j * TILE_SIZE - 5), gridOffsetY + (i * TILE_SIZE - 5), TILE_SIZE, TILE_SIZE};
-            tiles[i][j].hexValue = RandomHex();
-            tiles[i][j].bIsHighlighted = false;
-            tiles[i][j].row = i;
-            tiles[i][j].col = j;
-        }
-    }
+    ResetGrid();
 
     m_pTile_Focused = nullptr;
     m_pTile_MatchingStart = nullptr;
@@ -35,7 +26,13 @@ void TileGrid::InitGrid()
 void TileGrid::UpdateGrid()
 {
     Vector2 mousePosition = GetMousePosition();
-
+    
+    // its kinda funny , when i played it and the reset showed glitching numbers, i liked it and kept it in the game
+    gridResetTimer -= GetFrameTime();
+    if (int(gridResetTimer) % 15  == 0)  
+    {
+        ResetGrid();
+    }
 
     m_pTile_Focused = nullptr; 
 
@@ -142,6 +139,22 @@ void TileGrid::UnloadGrid()
     UnloadTexture(tileTexture);
 }
 
+void TileGrid::ResetGrid()
+{
+    for (int i = 0; i < GRID_SIZE; i++)
+    {
+        for (int j = 0; j < GRID_SIZE; j++)
+        {
+            tiles[i][j].position = {gridOffsetX + (j * TILE_SIZE - 5), gridOffsetY + (i * TILE_SIZE - 5)};
+            tiles[i][j].rect = {gridOffsetX + (j * TILE_SIZE - 5), gridOffsetY + (i * TILE_SIZE - 5), TILE_SIZE, TILE_SIZE};
+            tiles[i][j].hexValue = RandomHex();
+            tiles[i][j].bIsHighlighted = false;
+            tiles[i][j].row = i;
+            tiles[i][j].col = j;
+        }
+    }
+}
+
 void TileGrid::CheckSelections()
 {
     if (m_pTile_MatchingStart == nullptr || m_pTile_MatchingEnd == nullptr)
@@ -171,6 +184,8 @@ void TileGrid::CheckSelections()
         if (bCanMatch && counter >= 3)
         {
             RemoveMatchingTilesFromRow(sharedRow, minCol, maxCol);
+            MagicBar::Get().SetHexValue(m_pTile_MatchingEnd->col, m_pTile_MatchingEnd->hexValue);
+
         }
     }
     else if (m_pTile_MatchingStart->col == m_pTile_MatchingEnd->col)
@@ -193,6 +208,7 @@ void TileGrid::CheckSelections()
         if (bCanMatch && counter >= 3)
         {
             RemoveMatchingTilesFromCol(sharedCol, minRow, maxRow);
+            MagicBar::Get().SetHexValue(m_pTile_MatchingEnd->col, m_pTile_MatchingEnd->hexValue);
         }
     }
         

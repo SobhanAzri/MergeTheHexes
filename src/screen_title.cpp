@@ -1,4 +1,5 @@
 #include "assets.h"
+#include "magic.h"
 #include "screens.h"
 #include <raylib.h>
 #include <cstdio>
@@ -81,6 +82,8 @@ void InitTitleScreen()
     snowflakeFrameTimer = 0;
     snowflakeMaxframes = 8;
 
+
+    MagicBar::Get().ResetMagic();
 
 
     // These look horrible because i couldnt be patient wit them

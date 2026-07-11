@@ -33,13 +33,16 @@ class TileGrid
     void DrawGrid();
     void UnloadGrid();
     void ResetGrid();
-    
+
     void CheckSelections();
     void RemoveMatchingTilesFromRow(const int& row,  const int& colMin, const int& colMax);
     void RemoveMatchingTilesFromCol(const int& col, const int& rowMin, const int& rowMax);
     void HighlightMatchingTileset();
 
  private:
+
+
+    float gridResetTimer = 0;
 
     float gridOffsetX;
     float gridOffsetY;

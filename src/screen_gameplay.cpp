@@ -4,6 +4,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "grid.h"
+#include "magic.h"
 
 #define MAX_ENEMIES 24
 
@@ -78,6 +79,7 @@ void InitGameplayScreen()
 
     player.InitPlayer();
     tileGrid.InitGrid();
+    MagicBar::Get().InitMagic();
 }
 
 void UpdateGameplayScreen()
@@ -104,6 +106,7 @@ void UpdateGameplayScreen()
     
     player.UpdatePlayer();
     tileGrid.UpdateGrid();
+    MagicBar::Get().UpdateMagic();
 
     if (secondsToEndScreen <= 0)
         bIsScreenFinished = true;
@@ -120,7 +123,7 @@ void DrawGameplayScreen()
     int seconds = int(secondsToEndScreen) % 60;
 
     DrawTextEx(font, TextFormat("%d:%d",minutes,seconds), 
-    {float(GetScreenWidth()/2), float(GetScreenHeight()/2)}, 30, 1, BLACK);
+    {float(GetScreenWidth()/2), float(GetScreenHeight()/2)}, 30, 1, WHITE);
     
 
     // Draw Torches
@@ -141,11 +144,9 @@ void DrawGameplayScreen()
     }
 
 
-    DrawText("TEXT", 20, 200, 20, RAYWHITE);
-
     player.DrawPlayer();
     tileGrid.DrawGrid();
-
+    MagicBar::Get().DrawMagic();
 }
 
 void UnloadGameplayScreen()
@@ -155,6 +156,7 @@ void UnloadGameplayScreen()
 
     player.UnloadPlayer();
     tileGrid.UnloadGrid();
+    MagicBar::Get().UnloadMagic();
 }
 
 int FinishGameplayScreen()
