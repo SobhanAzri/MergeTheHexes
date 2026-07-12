@@ -49,6 +49,7 @@ extern Music fireSound;
 extern Sound clickSounds[2];
 extern Sound errorSounds[2];
 extern Sound successSounds[2];
+extern Texture2D HexCurses[3];
 ///extern Sound fxCoin;
 //extern int time;
 //extern int result;      // 0-Loose, 1-Win

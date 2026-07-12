@@ -10,7 +10,11 @@
 
 void TileGrid::InitGrid()
 {
+    frameTimer = 0;
+
+    timerPosition = {float(GetScreenWidth() - 180), float(100)};
     gridResetTimer = 0;
+    shuffleRemainingTime = 15;
     gridOffsetX = GetScreenWidth()/2 - (GRID_SIZE/2 * (TILE_SIZE));
     gridOffsetY = 25 ;
 
@@ -27,11 +31,16 @@ void TileGrid::UpdateGrid()
 {
     Vector2 mousePosition = GetMousePosition();
     
-    // its kinda funny , when i played it and the reset showed glitching numbers, i liked it and kept it in the game
-    gridResetTimer -= GetFrameTime();
+    // its kinda funny , when i played it and the reset showed glitching numbers, i liked it and kept it in the game.
+    //  -- i think its because i cast it to int so it generates randomness a full second, idk 
+    frameTimer = GetFrameTime();
+    gridResetTimer -= frameTimer;
+    shuffleRemainingTime -= frameTimer;
     if (int(gridResetTimer) % 15  == 0)  
     {
         ResetGrid();
+        MagicBar::Get().ResetMagic();
+        shuffleRemainingTime = 15;
     }
 
     m_pTile_Focused = nullptr; 
@@ -112,6 +121,9 @@ void TileGrid::UpdateGrid()
 
 void TileGrid::DrawGrid()
 {
+    DrawTextEx(font, TextFormat("Reset in:\n\t\t\t%d", int(shuffleRemainingTime)), 
+    timerPosition, 30, 1, Fade(RAYWHITE, .75f));
+
     for (int i = 0; i < GRID_SIZE; i++)
     {
         for (int j = 0; j < GRID_SIZE; j++)
@@ -131,6 +143,9 @@ void TileGrid::DrawGrid()
               50, 1, BLACK);
         }
     }
+
+    Color random = MagicBar::Get().GetMagicColor();
+    printf("%d-%d-%d", random.r,random.g,random.b);
 
 }
 
@@ -183,8 +198,13 @@ void TileGrid::CheckSelections()
 
         if (bCanMatch && counter >= 3)
         {
+            int startValue = static_cast<int>(m_pTile_MatchingStart->hexValue);
+            int mergedValue = startValue * counter;
+
+            if (mergedValue > 15) mergedValue = 15;
+           
+            MagicBar::Get().SetHexValue(m_pTile_MatchingEnd->col, static_cast<EHexValues>(mergedValue));
             RemoveMatchingTilesFromRow(sharedRow, minCol, maxCol);
-            MagicBar::Get().SetHexValue(m_pTile_MatchingEnd->col, m_pTile_MatchingEnd->hexValue);
 
         }
     }
@@ -207,8 +227,13 @@ void TileGrid::CheckSelections()
 
         if (bCanMatch && counter >= 3)
         {
+            int startValue = static_cast<int>(m_pTile_MatchingStart->hexValue);
+            int mergedValue = startValue * counter;
+
+            if (mergedValue > 15) mergedValue = 15;
+
+            MagicBar::Get().SetHexValue(m_pTile_MatchingEnd->col, static_cast<EHexValues>(mergedValue));
             RemoveMatchingTilesFromCol(sharedCol, minRow, maxRow);
-            MagicBar::Get().SetHexValue(m_pTile_MatchingEnd->col, m_pTile_MatchingEnd->hexValue);
         }
     }
         

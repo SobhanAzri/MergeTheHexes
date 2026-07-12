@@ -41,8 +41,11 @@ class TileGrid
 
  private:
 
+    float frameTimer = 0; 
 
+    Vector2 timerPosition = {0, 0};
     float gridResetTimer = 0;
+    float shuffleRemainingTime = 0; // im not gonna touch gridResetTimer , playing with that removes that shuffle effect!
 
     float gridOffsetX;
     float gridOffsetY;

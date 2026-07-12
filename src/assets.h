@@ -22,6 +22,9 @@
 #define gameplay_grid_tile_width_height 16
 #define gameplay_magic_tile_width 120
 #define gameplay_magic_tile_height 140
+#define gameplay_projectile_width_height 50
+#define gameplay_enemy_width 89
+#define gameplay_enemy_height 88
 
 
 #endif /* ASSETS_H */

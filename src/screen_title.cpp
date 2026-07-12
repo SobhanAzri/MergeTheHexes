@@ -14,9 +14,10 @@ static bool bIsScreenFinished = false;
 
 static Texture2D titleTexture;
 static Texture2D titleBackground;
-static Texture2D fireTexture;
-static Texture2D snowflakeTexture;
-static Texture2D poisonTexture;
+//static Texture2D fireTexture;
+//static Texture2D snowflakeTexture;
+//static Texture2D poisonTexture;
+Texture2D HexCurses[3] = { 0 };
 static Texture2D poisonSmokeTexture;
 
 static float frameTimer = 0;
@@ -51,10 +52,10 @@ void InitTitleScreen()
 
     titleTexture = LoadTexture("resources/title/title.png");
     titleBackground = LoadTexture("resources/title/title_background.png");
-    fireTexture = LoadTexture("resources/title/fire.png");
-    snowflakeTexture = LoadTexture("resources/title/snowflakes.png");
-    poisonTexture = LoadTexture("resources/title/poison.png");
+    HexCurses[0] = LoadTexture("resources/title/fire.png");
+    HexCurses[1] = LoadTexture("resources/title/poison.png");
     poisonSmokeTexture = LoadTexture("resources/title/poisonSmoke.png");
+    HexCurses[2] = LoadTexture("resources/title/snowflakes.png");
 
 
     title_music = LoadMusicStream("resources/title/title_music.wav");
@@ -176,11 +177,11 @@ void DrawTitleScreen()
     Rectangle fireDestRect = {(float)GetScreenWidth() /2 -150 - float(title_fire_width * 2.5) / 2,
          (float)GetScreenHeight()/2 - float(title_fire_height * 2.5),title_fire_width * 2.5, title_fire_height * 2.5};
     // there is no enough time so im not gonna experiment with locations of these textures on screen
-    DrawTexturePro(fireTexture, fireSourceRect, fireDestRect, {0,0}, 0.f, WHITE);
+    DrawTexturePro(HexCurses[0], fireSourceRect, fireDestRect, {0,0}, 0.f, WHITE);
 
     Rectangle poisonSmokeSourceRect = {float(poisonSmokeCurrentFrame * title_poison_smoke_width),0,
     title_poison_smoke_width, title_poison_smoke_height};
-    DrawTexture(poisonTexture, hexCenter.x - int(title_poison_width_height/2) - 60,
+    DrawTexture(HexCurses[1], hexCenter.x - int(title_poison_width_height/2) - 60,
     hexCenter.y - int(title_poison_width_height/2) + 30, WHITE);
     DrawTextureRec(poisonSmokeTexture, poisonSmokeSourceRect,
         {hexCenter.x - int(title_poison_smoke_width/2) - 60, hexCenter.y - int(title_poison_smoke_height/2) - 15}, GREEN);
@@ -188,7 +189,7 @@ void DrawTitleScreen()
     
     Rectangle snowflakeRect = { float(snowflakeCurrentFrame * title_snowflake_width), 0,
         title_snowflake_width, title_snowflake_height};
-    DrawTextureRec(snowflakeTexture, snowflakeRect, 
+    DrawTextureRec(HexCurses[2], snowflakeRect, 
         {hexCenter.x + int(title_snowflake_width/2) ,
             hexCenter.y + int(title_snowflake_height/2) - 30},
              {60,180,255,255});
@@ -207,9 +208,9 @@ void UnloadTitleScreen()
 {
     UnloadTexture(titleTexture);
     UnloadTexture(titleBackground);
-    UnloadTexture(fireTexture);
-    UnloadTexture(snowflakeTexture);
-    UnloadTexture(poisonTexture);
+    UnloadTexture(HexCurses[0]);
+    UnloadTexture(HexCurses[1]);
+    UnloadTexture(HexCurses[2]);
     UnloadTexture(poisonSmokeTexture);
 
     UnloadMusicStream(title_music);

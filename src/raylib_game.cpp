@@ -9,6 +9,14 @@
 *
 ********************************************************************************************/
 
+
+/*******************************************************************************************
+*   This code is so messy and has so much problems that im kinda embarrassed to show it to
+*   someone. but im fully aware of the problems and i will fix everything
+*******************************************************************************************/
+
+
+
 #include "assets.h"
 #include "magic.h"
 #include "raylib.h"
@@ -127,9 +135,7 @@ int main(void)
     SetTextureFilter(font2.texture, TEXTURE_FILTER_BILINEAR);
 
     HideCursor();
-    //InitGameplayScreen();
     InitLogoScreen();
-    //InitTitleScreen();
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
@@ -336,9 +342,9 @@ void UpdateDrawFrame(void)
         
 
         DrawTexture(cursorTexture, cursorPosition.x - global_cursor_width_height/4,
-             cursorPosition.y - global_cursor_width_height/4, MagicBar::Get().GetMagicColor());
-        DrawTexture(cursorLightTexture, cursorPosition.x - global_cursor_light_width_height/2,
-             cursorPosition.y - global_cursor_light_width_height/2, Fade(MagicBar::Get().GetMagicColor(), .3f));
+             cursorPosition.y - global_cursor_width_height/4, Fade(RAYWHITE, .7f));
+        DrawTexture(cursorLightTexture, cursorPosition.x - global_cursor_light_width_height/2 + 5,
+             cursorPosition.y - global_cursor_light_width_height/2 + 5, Fade(RAYWHITE, .7f));
         
 
     EndDrawing();
@@ -359,8 +365,8 @@ bool Button(const Rectangle& bounds, const char* text, const float& fontSize, co
     {
         if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
         {
-            bIsPressed = true;
             PlaySound(clickSounds[rand() % 2]);
+            return true;
         }
         else
             bIsFocused = true;

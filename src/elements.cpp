@@ -3,7 +3,7 @@
 
 char GetHexSymbol(const EHexValues& HexValue)
 {
-    switch (HexValue)
+    /*switch (HexValue)
     {
         case EHexValues::Hex0:
             return '0';
@@ -19,6 +19,15 @@ char GetHexSymbol(const EHexValues& HexValue)
             return 'F';
         default:
             break;
+    }*/
+
+    int val = static_cast<int>(HexValue);
+
+    if (val >= 0 && val <= 9) {
+        return '0' + val; 
+    } 
+    else if (val >= 10 && val <= 15) {
+        return 'A' + (val - 10); 
     }
 
     return '0';
@@ -44,14 +53,12 @@ EHexValues RandomHex()
 
     int dice = GetRandomValue(1, 100);
 
-    if (dice <= 30)
+    if (dice <= 35)
         return EHexValues::Hex2;
-    else if (dice <= 60)
-        return EHexValues::Hex4;
-    else if (dice <= 80)
-        return EHexValues::Hex8;
+    else if (dice <= 75)
+        return EHexValues::Hex3;
     else if (dice <= 100)
-        return EHexValues::HexF;
+        return EHexValues::Hex4;
 }
 
 
@@ -68,16 +75,12 @@ Color GetHexValueColor(const EHexValues& hexValue)
 {
     switch (hexValue)
     {
-        case EHexValues::Hex1:
-            return WHITE;
         case EHexValues::Hex2:
+            return WHITE;
+        case EHexValues::Hex3:
             return {210, 210, 240,255};
         case EHexValues::Hex4:
             return {180, 215, 240,255};
-        case EHexValues::Hex8:
-            return {145, 189, 223,255};
-        case EHexValues::HexF:
-            return {255, 235, 0, 255};
         default:
             break;
     }

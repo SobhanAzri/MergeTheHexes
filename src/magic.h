@@ -29,7 +29,7 @@ struct MagicBar
     float gridOffsetX;
 
     char hexadecimalValue[7] = "000000";
-    Color currentColor = {255, 255, 255, 255};
+    Color currentColor = {0, 0, 0, 255};
     Texture2D tileTexture = { 0 };
 
     // there is only 24H left for the end of the jam so im just gonna rawdog it with messy codes
@@ -41,6 +41,22 @@ struct MagicBar
     void RefreshMagicColor();
     Color GetMagicColor();
 
+    const char* colorText;
+    Vector2 textSize;
+    Vector2 textPos;
+
+};
+
+struct MagicBall
+{
+    int fireDamage = 0;
+    int poisonDamage = 0;
+    int freezeDamage = 0;
+
+    Vector2 position = {0};
+    Vector2 velocity = { 0 };
+    Color color = {0};
+    bool bIsActive = false;
 };
 
 #endif /* MAGIC_H */
