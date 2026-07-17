@@ -1,6 +1,6 @@
-## $(Merge The Hexes)
+## Merge The Hexes
 
-![$(Merge The Hexes)](screenshots/screenshot000.png "$(Game Title)")
+![$(Merge The Hexes)](screenshots/screenshot000.png "Merge The Hexes")
 
 ### Description
 
@@ -8,13 +8,15 @@ Merge The Hexes is a 2D "Survival Roguelite" game i developed for "raylab 6.x 20
 
 ### Features
 
- - $(Game Feature 01)
- - $(Game Feature 02)
- - $(Game Feature 03)
+![$(Merge The Hexes)](screenshots/screenshot001.png "Merge The Hexes Gameplay")
+
+ - Initializing powers from a hexadecimal color code
+ - Tile match style gameplay
+ - Challenging survival gameplay
 
 ### Controls
 
-Mouse Left Click!
+Mouse Left & Right Clicks!
 
 ### Screenshots
 
@@ -25,8 +27,7 @@ Mouse Left Click!
 
 ### Links
 
- - YouTube Gameplay: $(YouTube Link)
- - itch.io Release: $(itch.io Game Page)
+ - itch.io Release: https://sobhan-azri.itch.io/mergethehexes
 
 ### License
 
