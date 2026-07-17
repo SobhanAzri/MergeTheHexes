@@ -8,7 +8,7 @@ Merge The Hexes is a 2D "Survival Roguelite" game i developed for "raylab 6.x 20
 
 ### Features
 
-![$(Merge The Hexes)](screenshots/screenshot001.png "Merge The Hexes Gameplay")
+<img src="screenshots/screenshot001.png" width="360">
 
  - Initializing powers from a hexadecimal color code
  - Tile match style gameplay
