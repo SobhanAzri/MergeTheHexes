@@ -2,8 +2,6 @@
 #include "magic.h"
 #include "screens.h"
 #include <raylib.h>
-#include <cstdio>
-#include "raymath.h"
 
 
 static int frameCounter = 0;
@@ -14,9 +12,6 @@ static bool bIsScreenFinished = false;
 
 static Texture2D titleTexture;
 static Texture2D titleBackground;
-//static Texture2D fireTexture;
-//static Texture2D snowflakeTexture;
-//static Texture2D poisonTexture;
 Texture2D HexCurses[3] = { 0 };
 static Texture2D poisonSmokeTexture;
 
@@ -39,10 +34,6 @@ static int snowflakeMaxframes = 0;
 
 Music title_music = { 0 };
 
-
-/*Vector2 fireTris[3];
-Vector2 poisonTris[3];
-Vector2 freezeTris[3];*/
 
 void InitTitleScreen()
 {
@@ -86,22 +77,6 @@ void InitTitleScreen()
 
     MagicBar::Get().ResetMagic();
 
-
-    // These look horrible because i couldnt be patient wit them
-
-    /*fireTris[0] = {(float)GetScreenWidth() /2 -120 + 60, (float)GetScreenHeight()/2 + 120 + 100};
-    fireTris[1] = {(float)GetScreenWidth() /2 -120 - 60, (float)GetScreenHeight()/2 + 120 + 100};
-    fireTris[2] = {(float)GetScreenWidth() /2 -120, (float)GetScreenHeight()/2 + 120 - 100};
-
-
-    poisonTris[0] = {(float)GetScreenWidth() /2 -120 + 60, (float)GetScreenHeight()/2 + 120 + 100};
-    poisonTris[1] = {(float)GetScreenWidth() /2 -120 - 60, (float)GetScreenHeight()/2 + 120 + 100};
-    poisonTris[2] = {(float)GetScreenWidth() /2, (float)GetScreenHeight()/2 + 120};
-
-
-    freezeTris[0] = {(float)GetScreenWidth() /2 -120, (float)GetScreenHeight()/2 + 120 + 100};
-    freezeTris[1] = {(float)GetScreenWidth() /2 -120 - 60, (float)GetScreenHeight()/2 + 120 - 100};
-    freezeTris[2] = {(float)GetScreenWidth() /2 -120 + 60, (float)GetScreenHeight()/2 + 120 - 100};*/
 }
 
 void UpdateTitleScreen()
@@ -153,8 +128,6 @@ void DrawTitleScreen()
 
     Vector2 hexCenter = {(float)GetScreenWidth() /2 -150, (float)GetScreenHeight()/2 + 60};
 
-   // DrawPolyLinesEx(hexCenter,
-    // 6, 125, 0, 5 , {125,0,0,255});
     DrawPolyLinesEx(hexCenter,
      3 , 100, -90, 5, {125,0,0,255});
 
@@ -165,9 +138,6 @@ void DrawTitleScreen()
     DrawPolyLinesEx(hexCenter,
      6 , 13, 0, 4, {105,190,210,255});
     DrawCircle(hexCenter.x,hexCenter.y, 5, {125,0,0,255});
-     //DrawTriangleLines(fireTris[0], fireTris[1], fireTris[2], RED);
-    //DrawTriangleLines(poisonTris[0], poisonTris[1], poisonTris[2], GREEN);
-    //DrawTriangleLines(freezeTris[0], freezeTris[1], freezeTris[2], BLUE);
 
 
     // these title drawing parts are horrible because i did these in the last days 

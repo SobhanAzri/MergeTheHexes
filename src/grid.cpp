@@ -54,25 +54,6 @@ void TileGrid::UpdateGrid()
             {
                     tiles[i][j].bIsHighlighted = true; 
                     m_pTile_Focused = &tiles[i][j];
-
-                    /*if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
-                    {
-                        if (m_pTile_MatchingStart == nullptr)
-                        {
-                            m_pTile_MatchingStart = m_pTile_Focused;
-                            m_pTile_MatchingStart->bIsHighlighted = true;
-                        }
-                        else if (m_pTile_MatchingEnd == nullptr)
-                        {
-                            m_pTile_MatchingEnd = m_pTile_Focused;
-                            CheckSelections();
-                        }
-                        else
-                        {
-                            m_pTile_MatchingStart = nullptr;
-                            m_pTile_MatchingEnd = nullptr;
-                        }
-                    }*/
             }
             else
             {
@@ -180,7 +161,6 @@ void TileGrid::CheckSelections()
 
     if (m_pTile_MatchingStart->row == m_pTile_MatchingEnd->row)
     {
-        //printf("YES");
 
         int sharedRow = m_pTile_MatchingStart->row; // just for clarification; might remove later
         int minCol = std::min(m_pTile_MatchingStart->col, m_pTile_MatchingEnd->col);
@@ -271,11 +251,6 @@ void TileGrid::RemoveMatchingTilesFromCol(const int& col, const int& rowMin, con
         return;
 
     int iterator = 0;
-
-    /*if (rowMin != 0)
-    {
-        for (int i = rowMin; i <)
-    }*/
 
 
     // the best thing i can think of is this after testing out couple of methods

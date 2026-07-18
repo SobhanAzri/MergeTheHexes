@@ -37,7 +37,6 @@ void Player::UpdatePlayer()
 {
     frameCounter++;
     frameTimer += GetFrameTime();
-    //Vector2 mousePosition = GetMousePosition(); // i know i used this in couple of update functions so i will organize it later
 
     if (AttackInterval > 0)
         AttackInterval -= frameTimer;

@@ -35,17 +35,6 @@ char GetHexSymbol(const EHexValues& HexValue)
 
 EHexValues RandomHex()
 {
-    /*static EHexValues AllPossibleValues[4] = 
-    {
-        //EHexValues::Hex1,
-        EHexValues::Hex2,
-        EHexValues::Hex4,
-        EHexValues::Hex8,
-        EHexValues::HexF
-    };
-    int randomIndex = GetRandomValue(0, 3);
-    return AllPossibleValues[randomIndex];*/
-
     // i tried so many ways to not hit dead end but i noticed for a 6x6 grid its nearly impossible
     // to have 5 different tile hexadecimal values so i decreased the number of elements to 4
     // also i thought about checking for deadends and reshuffling if there is no possible moves

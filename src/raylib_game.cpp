@@ -107,12 +107,6 @@ int main(void)
     
     InitAudioDevice();
 
-    // TODO: Load resources / Initialize variables at this point
-    
-    // Render texture to draw, enables screen scaling
-    // NOTE: If screen is scaled, mouse input should be scaled proportionally
-    //target = LoadRenderTexture(screenWidth, screenHeight);
-    //SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
 
     clickSounds[0] = LoadSound("resources/interfaceAudio/click01.ogg");
@@ -166,6 +160,7 @@ int main(void)
     // TODO: Unload all loaded resources at this point
 
     UnloadFont(font);
+    UnloadFont(font2);
     UnloadMusicStream(fireSound);
     for (int i = 0; i < 2; i++)
     {

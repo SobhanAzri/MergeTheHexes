@@ -4,11 +4,11 @@
 
 ### Description
 
-Merge The Hexes is a 2D "Survival Roguelite" game i developed for "raylab 6.x 2026 GameJam".
+Merge The Hexes is a 2D "Survival Roguelite" game i developed for "raylib 6.x 2026 GameJam".
 
 ### Features
 
-<img src="screenshots/screenshot001.png" width="360">
+<img src="screenshots/screenshot001.png" width="540">
 
  - Initializing powers from a hexadecimal color code
  - Tile match style gameplay
